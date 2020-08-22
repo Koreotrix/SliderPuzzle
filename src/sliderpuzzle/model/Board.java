@@ -7,9 +7,6 @@ public class Board {
     public static void main(String[] args) {
         Board board = new Board();
         System.out.println(board.toString());
-        board.moveLeft();
-        board.makeMove(15);
-        System.out.println(board.toString());
         
     }
     
@@ -32,7 +29,25 @@ public class Board {
         }
         this.grid[grid.length - 1] = new Empty(); // last space (bottom right) is the empty space
         
+    }
+    
+    public Tile getTile(int placement) {
+        if (grid[placement] instanceof Tile) {
+            return (Tile) grid[placement];
+        } return null;
+    } 
+    
+    public int findTilePlacement(int id) {
         
+        Tile tile = null;
+        
+        for(int i = 0; i < grid.length; i++) {
+            if (grid[i] instanceof Tile) {
+                tile = (Tile) grid[i];
+                if (tile.getID() == id) return i;
+            }
+        }
+        return 15;
     }
     
     // Player Mechanics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,7 +73,7 @@ public class Board {
         else if (placement == down) { moveDown(); }
         else { System.err.println("Cannot make move"); }
         
-        if (checkCompletion()) System.out.println("COMPLETED");
+        checkCompletion();
     }
     
     public boolean moveLeft() {
@@ -68,7 +83,7 @@ public class Board {
         
         // swap empty with position to the left
         Empty empty = (Empty) grid[emptySlot];
-        Tile tile = (Tile)grid[emptySlot-1];
+        Tile tile = getTile(emptySlot-1);
         
         grid[emptySlot] = tile;
         grid[emptySlot-1] = empty;
@@ -85,7 +100,7 @@ public class Board {
         
         // swap empty with position to the right
         Empty empty = (Empty) grid[emptySlot];
-        Tile tile = (Tile)grid[emptySlot+1];
+        Tile tile = getTile(emptySlot+1);
         
         grid[emptySlot] = tile;
         grid[emptySlot+1] = empty;
@@ -101,7 +116,7 @@ public class Board {
         
         // swap empty with position upwards
         Empty empty = (Empty) grid[emptySlot];
-        Tile tile = (Tile)grid[emptySlot-4];
+        Tile tile = getTile(emptySlot-4);
         
         grid[emptySlot] = tile;
         grid[emptySlot-4] = empty;
@@ -117,7 +132,7 @@ public class Board {
         
         // swap empty with position downwards
         Empty empty = (Empty) grid[emptySlot];
-        Tile tile = (Tile)grid[emptySlot+4];
+        Tile tile = getTile(emptySlot+4);
         
         grid[emptySlot] = tile;
         grid[emptySlot+4] = empty;
@@ -156,7 +171,7 @@ public class Board {
         
         Tile current = null;
         
-        for (int i = 0; i <= emptySlot; i++ ) {
+        for (int i = 0; i < emptySlot; i++ ) {
             
             if (grid[i] instanceof Tile) {
                 current = (Tile) grid[i];
@@ -167,7 +182,20 @@ public class Board {
             
         }
         
+        System.out.println("COMPLETED");
         return true;
+    }
+    
+    public void solve() {
+        
+        int id = 1;
+        // First Layer
+        // Find location of 1
+        id = findTilePlacement(id);
+        
+        
+        
+        
     }
     
     // Overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
